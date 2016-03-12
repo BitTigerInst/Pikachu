@@ -1,9 +1,5 @@
 var elasticsearch = require('elasticsearch');
 
-
-// Reference:
-// https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/quick-start.html
-
 var client = new elasticsearch.Client({
   host: 'localhost:9200',
   log: 'trace'
@@ -14,7 +10,7 @@ client.ping({
 
   // undocumented params are appended to the query string
   hello: "elasticsearch"
-}, function (error) {
+}, function(error) {
   if (error) {
     console.error('elasticsearch cluster is down!');
   } else {
@@ -22,8 +18,13 @@ client.ping({
   }
 });
 
-// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
 
+/**
+ * searchRecipe() function to search with ElasticSearch API
+ * @param  {[type]}   q        search term
+ * @param  {Function} callback function(err, hits)
+ * @return {[type]}            [description]
+ */
 function searchRecipe(q, callback) {
 
   client.search({
@@ -35,23 +36,20 @@ function searchRecipe(q, callback) {
           name: q
         }
       }
-    },
-    sort : [
-        { 'rating': "desc"},
-        { 'likes': "desc" },
-        { 'dishes': "desc" },
-        { 'cooked': "desc"},
-        {"_score": "desc"}
-    ]
-  }).then(function (res) {
-      var hits = [];
-      if (res && res.hits && res.hits.hits) {
-        hits = res.hits.hits;
-      }
-      callback(null, hits);
-  }, function (err) {
-      console.trace(err.message);
-      callback(err, null);
+    }
+  })
+  .then(function(res) {
+    var hits = [];
+    if (res && res.hits && res.hits.hits) {
+      hits = res.hits.hits.map(function(hit) {
+        hit._source.id = hit._id.split(':')[1];
+        return hit._source;
+      });
+    }
+    callback(null, hits);
+  }, function(err) {
+    console.trace(err.message);
+    callback(err, null);
   });
 }
 
