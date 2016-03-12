@@ -1,0 +1,27 @@
+<ion-view view-title="美食天下">
+  <ion-nav-buttons side="secondary">
+    <div>
+      <a href="#/app/search"><button class="button button-icon icon ion-ios-search"></button></a>
+    </div>
+  </ion-nav-buttons>
+
+  <ion-content class="has-header padding">
+    <ion-list>
+        <ion-item ng-repeat="recipe in recipes" class="item-thumbnail-left item-text-wrap">
+          <img ng-src="{{recipe.image}}">
+          <h3>{{recipe.name}}</h3>
+          <div>
+            <span style="font-size:75%">
+              <ion-badge ng-repeat="ing in recipe.ingredients">{{ing}}&nbsp;</ion-badge></br>
+              综评&nbsp;<span style="font-weight:bold; color:green">{{recipe.rating}}</span>
+              &nbsp;做过&nbsp;<span style="font-weight:bold; color:green">{{recipe.cooked}}</span>
+              &nbsp;收藏&nbsp;<span style="font-weight:bold; color:green">{{recipe.likes}}</span>
+            </span>
+          </div>
+          <ion-option-button class="button-assertive icon ion-star"
+              ng-click="addFavorite({{dish.id}})">
+          </ion-option-button>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+</ion-view>

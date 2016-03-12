@@ -1,0 +1,32 @@
+.platform-ios.platform-cordova:not(.fullscreen) {
+    .search-bar.bar-header {
+        height: 44px;
+        top: 64px;
+
+        &.search-bar-focused {
+            height: 64px;
+            top: 0;
+        }
+    }
+
+    .search-bar.bar-header.item-input-inset {
+        .item-input-wrapper {
+            transition: all ease-in-out 250ms;
+            margin-top: 0 !important;
+        }
+    }
+
+    .search-bar.search-bar-focused.bar-header.item-input-inset {
+        .item-input-wrapper {
+            margin-top: 19px !important;
+        }
+    }
+
+    .has-search-bar {
+        top: 108px;
+
+        &.search-bar-focused {
+            top: 64px;
+        }
+    }
+}

@@ -1,0 +1,28 @@
+<ion-view>
+  <ion-content class="has-header padding">
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper" id = "searchRecipe">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="食材，菜谱" ng-model="model.query" ng-change="search()">
+      </label>
+    </div>
+
+    <ion-list>
+        <ion-item ng-repeat="recipe in recipes" class="item-thumbnail-left item-text-wrap">
+          <img ng-src="{{recipe.image}}">
+          <h3>{{recipe.name}}</h3>
+          <div><ion-badge style="font-size:75%" ng-repeat="ing in recipe.ingredients">{{ing}}&nbsp;</ion-badge></div>
+          <div>
+            <span style="font-size:75%">
+              综评&nbsp;<span style="font-weight:bold; color:green">{{recipe.rating}}</span>
+              &nbsp;做过&nbsp;<span style="font-weight:bold; color:green">{{recipe.cooked}}</span>
+              &nbsp;收藏&nbsp;<span style="font-weight:bold; color:green">{{recipe.likes}}</span>
+            </span>
+          </div>
+          <ion-option-button class="button-assertive icon ion-star"
+              ng-click="addFavorite({{dish.id}})">
+          </ion-option-button>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+</ion-view>
