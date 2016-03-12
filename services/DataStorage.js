@@ -20,13 +20,20 @@ exports.saveRecipe = function saveRecipe(recipe) {
     categories: recipe.categories
   });
 
-  newRecipe.save(function (err) {
+  newRecipe.save(function(err) {
     if (err) {
       console.log('save recipe doc failed: ' + err.message);
 
       var id = "recipe:" + recipe.id;
+      var upsert = {upsert: true};
+
       delete recipe.id;
-      Recipe.findByIdAndUpdate(id, recipe, {upsert: true}, function(err, doc){
+
+      // if (String(recipe.rating) == "NaN") {
+      //   recipe.rating = 0;
+      // }
+
+      Recipe.findByIdAndUpdate(id, recipe, upsert, function(err, doc) {
         if (err) {
           console.log('update recipe doc failed: ' + err);
         } else {
@@ -36,8 +43,7 @@ exports.saveRecipe = function saveRecipe(recipe) {
     }
   });
 
-
-}
+};
 
 exports.saveCategory = function saveCategory(category) {
   var newCategory = new Category({
@@ -46,12 +52,14 @@ exports.saveCategory = function saveCategory(category) {
     recipes: category.recipes
   });
 
-  newCategory.save(function (err) {
+  newCategory.save(function(err) {
     if (err) {
       console.log('save category doc failed: ' + err.message);
       var id = "category:" + category.id;
+      var upsert = {upsert: true};
+
       delete category.id;
-      Category.findByIdAndUpdate(id, category, {upsert: true}, function(err, doc){
+      Category.findByIdAndUpdate(id, category, upsert, function(err, doc) {
         if (err) {
           console.log('update category doc failed: ' + err);
         } else {
@@ -60,4 +68,4 @@ exports.saveCategory = function saveCategory(category) {
       });
     }
   });
-}
+};

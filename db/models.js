@@ -1,11 +1,6 @@
 var mongoose = require('mongoose');
-
 var MongoDBClient = require("../services/MongoDBClient");
 var schema = require('./schema');
-
-
-// var Category;
-// var Recipe;
 
 var models = {};
 
@@ -15,7 +10,7 @@ MongoDBClient.getInstance(function(err, client) {
   } else {
     console.log("connected to MongoDB, model initialization succeeded");
   }
-})
+});
 
 var Category = mongoose.model('Category', schema.categorySchema);
 var Recipe = mongoose.model('Recipe', schema.recipeSchema);

@@ -8,6 +8,7 @@ router.get('/v1/recipe/', function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
 
   var response = {};
+
   if (true) {
     QueryService.getDefaultRecipes(function(err, docs) {
       if (err) {
@@ -32,8 +33,10 @@ router.get('/v1/recipe/:id', function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
 
   var response = {};
+
   if (req.params.id) {
     var id = req.params.id;
+
     console.log("Recipe id: " + id);
 
     QueryService.getRecipe(id, function(err, doc) {
@@ -61,6 +64,7 @@ router.get('/v1/search', function(req, res, next) {
   // URL parameter /v1/search?q=
   if (req.query.q) {
     var q = req.query.q;
+
     console.log("Search term: " + q);
 
     QueryService.searchRecipe(q, function(err, docs) {
@@ -84,9 +88,11 @@ router.get('/v2/search', function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
 
   var response = {};
+
   // URL parameter /v2/search?q=
   if (req.query.q) {
     var q = req.query.q;
+
     console.log("Search term: " + q);
 
     SearchService.searchRecipe(q, function(err, docs) {

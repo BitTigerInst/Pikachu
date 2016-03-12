@@ -4,10 +4,13 @@ var Crawler = require("simplecrawler");
 var cheerio = require('cheerio');
 var fs = require('fs');
 var config = require('../config.js');
-var random_ua = require('random-ua');
+var randomUA = require('random-ua');
 // var request = require('request');
 // var url = require('url');
 // var parseRobots = require("robots-parser");
+
+// Respect robots.txt
+// https://github.com/cgiffard/node-simplecrawler/blob/master/example/robots-txt-example.js
 
 var xcfParser = require('../parsers/xcfParser');
 var xcfQueue = require('../resources/xcfQueue');
@@ -15,17 +18,19 @@ var xcfQueue = require('../resources/xcfQueue');
 /* GET users listing. */
 router.post('/', function(req, res, next) {
 
-  var IP_FileName = "ip_list.txt";
-  var IP_FilePath = "./resources/"
-  var IP_File = IP_FilePath + IP_FileName;
+  var ipFileName = "ip_list.txt";
+  var ipFilePath = "./resources/";
+  var ipFile = ipFilePath + ipFileName;
 
-  var IP_Data = fs.readFileSync(IP_File).toString();
-  var IP_AddrLine = IP_Data.split('\n');
+  var ipData = fs.readFileSync(ipFile).toString();
+  var ipAddrLine = ipData.split('\n');
 
-  var IP_POOL = [];
-  for (var i = 0; i < IP_AddrLine.length - 1; i++) {
-    var element = IP_AddrLine[i].split(':');
-    IP_POOL.push({
+  var ipPOOL = [];
+
+  for (var i = 0; i < ipAddrLine.length - 1; i++) {
+    var element = ipAddrLine[i].split(':');
+
+    ipPOOL.push({
       "ip": element[0].trim(),
       "port": parseInt(element[1])
     });
@@ -53,11 +58,11 @@ router.post('/', function(req, res, next) {
   rotateIP();
   rotateUserAgent();
 
-  var conditionID_fileType = crawler.addFetchCondition(function(parsedURL) {
+  var conditionIdFileType = crawler.addFetchCondition(function(parsedURL) {
     return !parsedURL.path.match(/(\.pdf$|\.png$|\.jpg$|\.js$)/i);
   });
 
-  var conditionID_pathType = crawler.addFetchCondition(function(parsedURL) {
+  var conditionIdPathType = crawler.addFetchCondition(function(parsedURL) {
     return parsedURL.path.match(/(\/recipe\/|\/category\/)/i);
   });
 
@@ -66,31 +71,32 @@ router.post('/', function(req, res, next) {
   function queueStats() {
     console.log("-----------------------------------------");
     console.log("maximum request latency was %dms.",
-      crawler.queue.max("requestLatency"));
+    crawler.queue.max("requestLatency"));
     console.log("minimum download time was %dms.",
-      crawler.queue.min("downloadTime"));
+    crawler.queue.min("downloadTime"));
     console.log("average resource size received is %d bytes.",
-      crawler.queue.avg("actualDataSize"));
+    crawler.queue.avg("actualDataSize"));
     console.log("number of completed queue item: %d.",
-      crawler.queue.complete());
+    crawler.queue.complete());
     console.log("number of failed queue item: %d.",
-      crawler.queue.errors());
+    crawler.queue.errors());
     console.log("-----------------------------------------");
   }
 
   setInterval(rotateIP, 800);
 
   function rotateIP() {
-    var rand = parseInt(Math.random() * IP_POOL.length);
-    var ipIndex = Math.min(Math.max(0, rand), IP_POOL.length -1);
-    crawler.proxyHostname = IP_POOL[ipIndex].ip;
-    crawler.proxyPort = IP_POOL[ipIndex].port;
+    var rand = parseInt(Math.random() * ipPOOL.length);
+    var ipIndex = Math.min(Math.max(0, rand), ipPOOL.length - 1);
+
+    crawler.proxyHostname = ipPOOL[ipIndex].ip;
+    crawler.proxyPort = ipPOOL[ipIndex].port;
   }
 
   setInterval(rotateUserAgent, 1000);
 
   function rotateUserAgent() {
-    crawler.userAgent = random_ua.generate();
+    crawler.userAgent = randomUA.generate();
   }
 
   // Crawler event handlers
@@ -137,7 +143,7 @@ router.post('/', function(req, res, next) {
   });
 
   crawler.on("complete", function() {
-      console.log("Finished!");
+    console.log("Finished!");
   });
 
   crawler.start();

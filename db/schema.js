@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 
 var categorySchema = new mongoose.Schema({
-  _id: { type: String },
+  _id: {
+    type: String
+  },
   name: {
     type: String,
     reqired: true
@@ -13,7 +15,9 @@ var categorySchema = new mongoose.Schema({
 
 // http://schema.org/Recipe
 var recipeSchema = new mongoose.Schema({
-  _id: { type: String },
+  _id: {
+    type: String
+  },
   name: {
     type: String,
     reqired: true

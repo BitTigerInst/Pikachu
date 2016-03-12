@@ -40,6 +40,7 @@ function searchRecipe(q, callback) {
   })
   .then(function(res) {
     var hits = [];
+
     if (res && res.hits && res.hits.hits) {
       hits = res.hits.hits.map(function(hit) {
         hit._source.id = hit._id.split(':')[1];
