@@ -287,7 +287,11 @@ You can remove all data quickly and efficiently by [deleting the index](http://w
 
 ```
 curl -XDELETE http://<hostname>:<port>/<index name> curl -XPUT http://<hostname>:<port>/<index name>
+```
+
 After this, you should refresh the index to make these changes visible:
+
+```
 curl -XPOST http://<hostname>:<port>/<index name>/_refresh
 ```
 
@@ -299,9 +303,11 @@ curl -XPOST http://<hostname>:<port>/<index name>/_refresh
 - [Resyncing the Connector](https://github.com/mongodb-labs/mongo-connector/wiki/Resyncing%20the%20Connector)
 - [mongo-connector原理及改造](http://foofish.net/blog/76/mongo-connector)
 - [查询与过滤条件的合并](http://es.xiaoleilu.com/054_Query_DSL/75_Queries_with_filters.html)
-- [MongoBD+Solr全文搜索的历程](http://www.edwardesire.com/full-text-search-of-mongodb-with-solr/)
+- [MongoBD + Solr全文搜索的历程*](http://www.edwardesire.com/full-text-search-of-mongodb-with-solr/)
 - [mongo-connector原理及改造](http://foofish.net/blog/76/mongo-connector)
 - [StackOverflow: How to use Elasticsearch with MongoDB?](http://stackoverflow.com/questions/23846971/how-to-use-elasticsearch-with-mongodb)
 - [Optimizing Search Results in Elasticsearch with Scoring and Boosting](https://qbox.io/blog/optimizing-search-results-in-elasticsearch-with-scoring-and-boosting)
 - [Elasticsearch: The Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html)
 - [Elasticsearch权威指南（中文版）](https://www.gitbook.com/book/looly/elasticsearch-the-definitive-guide-cn/details)
+- [ElasticSearch Javascript API](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/quick-start.html)
+- [Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
