@@ -1,5 +1,9 @@
 var elasticsearch = require('elasticsearch');
 
+
+// Reference:
+// https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/quick-start.html
+
 var client = new elasticsearch.Client({
   host: 'localhost:9200',
   log: 'trace'
@@ -10,7 +14,7 @@ client.ping({
 
   // undocumented params are appended to the query string
   hello: "elasticsearch"
-}, function(error) {
+}, function (error) {
   if (error) {
     console.error('elasticsearch cluster is down!');
   } else {
@@ -18,45 +22,70 @@ client.ping({
   }
 });
 
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
 
-/**
- * searchRecipe() function to search with ElasticSearch API
- * @param  {[type]}   q        search term
- * @param  {Function} callback function(err, hits)
- * @return {[type]}            [description]
- */
 function searchRecipe(q, callback) {
 
   client.search({
     index: 'pikachu',
     type: 'recipes',
     body: {
-      query: {
-        match: {
-          name: q
+        "query": {
+            "function_score": {
+                "query": {
+                    "match_all": {}
+                },
+                "filter": {
+                    "term": {
+                        "name": q
+                    }
+                },
+                "functions": [
+                    {
+                        "field_value_factor": {
+                            "field": "likes",
+                            "factor": 1,
+                            "modifier": "log1p",
+                            "missing": 1
+                        }
+                    },
+                    {
+                        "field_value_factor": {
+                            "field": "rating"
+                        }
+                    },
+                    {
+                        "field_value_factor": {
+                            "field": "dishes",
+                            "factor": 1,
+                            "modifier": "log1p",
+                            "missing": 1
+                        }
+                    },
+                    {
+                        "field_value_factor": {
+                            "field": "cooked",
+                            "factor": 1,
+                            "modifier": "log1p",
+                            "missing": 1
+                        }
+                    }
+                ],
+                "boost_mode": "multiply"
+            }
         }
+    }
+  }).then(function (res) {
+      var hits = [];
+      if (res && res.hits && res.hits.hits) {
+        hits = res.hits.hits;
       }
-    }
-  })
-  .then(function(res) {
-    var hits = [];
-
-    if (res && res.hits && res.hits.hits) {
-      hits = res.hits.hits.map(processResultXCF);
-    }
-    callback(null, hits);
-  }, function(err) {
-    console.trace(err.message);
-    callback(err, null);
+      callback(null, hits);
+  }, function (err) {
+      console.trace(err.message);
+      callback(err, null);
   });
 }
 
-function processResultXCF(hit) {
-  var suffix = "@2o_50sh_1pr_1l_140w_106h_1c_1e_90q_1wh.jpg";
-
-  hit._source.id = hit._id.split(':')[1];
-  hit._source.image = hit._source.image.replace("s2.cdn", "s1.cdn") + suffix;
-  return hit._source;
-}
-
 exports.searchRecipe = searchRecipe;
+
