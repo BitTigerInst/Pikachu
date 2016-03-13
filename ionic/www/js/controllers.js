@@ -41,13 +41,14 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('homeController', ['$scope','recipeFactory', 'baseURL', function($scope, recipeFactory, baseURL){
+.controller('homeController', ['$scope','recipeFactory', 'favoriteFactory','baseURL', '$ionicListDelegate','$ionicModal', function($scope, recipeFactory, favoriteFactory, baseURL, $ionicListDelegate, $ionicModal){
   $scope.baseURL = baseURL;
   $scope.message = "Loading ...";
   $scope.showItem = false;
 
   recipeFactory.getRecipe().query(
     function(response){
+      console.log(response);
       $scope.recipes = response;
       $scope.showItem = true;
     },
@@ -55,17 +56,16 @@ angular.module('starter.controllers', [])
       $scope.message = "Error: "+response.status + " " + response.statusText;
     });
 
+    $scope.addFavorite = function (index) {
+      console.log("index is " + index);
+      favoriteFactory.addToFavorites(index);
+      $ionicListDelegate.closeOptionButtons();
+    };
+
 }])
 
-.controller('searchController', ['$scope', 'searchFactory',function($scope, searchFactory){
+.controller('searchController', ['$scope', 'searchFactory', 'favoriteFactory', '$ionicListDelegate', function($scope, searchFactory, favoriteFactory, $ionicListDelegate){
     $scope.message = "Loading ...";
-    // $scope.queryURL = "http://192.168.0.2:3002/api/v2/search?q="+encodeURIComponent($scope.searchQuery);
-    // queryURL = $scope.queryURL;
-    // searchFactory.search(queryURL).query(
-    //   function(response){
-    //     $scope.recipes = response;
-    //   }
-    // )
     $scope.model = {};
     $scope.model.query = "";
 
@@ -74,6 +74,81 @@ angular.module('starter.controllers', [])
       searchFactory.search($scope.model.query, function(err, response) {
         $scope.recipes = response.recipes;
       });
-    }
+    };
+
+    $scope.addFavorite = function (index) {
+      console.log("index is " + index);
+      favoriteFactory.addToFavorites(index);
+      $ionicListDelegate.closeOptionButtons();
+    };
 
 }])
+
+.controller('FavoritesController', ['$scope', 'recipeFactory', 'favoriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout', function ($scope, recipeFactory, favoriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout) {
+
+    $scope.baseURL = baseURL;
+    $scope.shouldShowDelete = false;
+
+    $ionicLoading.show({
+        template: '<ion-spinner></ion-spinner> Loading...'
+    });
+
+    $scope.favorites = favoriteFactory.getFavorites();
+    console.log("favorites: ", $scope.favorites.length);
+
+    $scope.recipes = recipeFactory.getRecipe().query(
+        function (response) {
+            $scope.recipes = response;
+            $timeout(function () {
+                $ionicLoading.hide();
+            }, 1000);
+        },
+        function (response) {
+            $scope.message = "Error: " + response.status + " " + response.statusText;
+            $timeout(function () {
+                $ionicLoading.hide();
+            }, 1000);
+        });
+
+    console.log($scope.recipes, $scope.favorites);
+
+    $scope.toggleDelete = function () {
+    $scope.shouldShowDelete = !$scope.shouldShowDelete;
+    console.log($scope.shouldShowDelete);
+};
+
+$scope.deleteFavorite = function (index) {
+
+    var confirmPopup = $ionicPopup.confirm({
+        title: 'Confirm Delete',
+        template: 'Are you sure you want to delete this item?'
+    });
+
+    confirmPopup.then(function (res) {
+        if (res) {
+            console.log('Ok to delete');
+            favoriteFactory.deleteFromFavorites(parseInt(index));
+        } else {
+            console.log('Canceled delete');
+        }
+    });
+
+    $scope.shouldShowDelete = false;
+
+};
+}])
+
+.filter('favoriteFilter', function () {
+    return function (recipes, favorites) { // The first par dishes is the array on which will be done the filtering. The second par favorites is the par that you supply the filter.
+        var out = [];
+        for (var i = 0; i < favorites.length; i++) {
+            for (var j = 0; j < recipes.length; j++) {
+                if (String(recipes[j].id) === String(favorites[i].id))
+                    out.push(recipes[j]);
+            }
+        }
+        return out;
+
+    }})
+
+;

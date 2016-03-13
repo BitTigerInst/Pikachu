@@ -1,0 +1,29 @@
+<ion-view view-title="我的收藏">
+    <ion-nav-buttons side="secondary">
+      <div class="buttons">
+        <button class="button button-icon icon ion-ios-minus-outline"
+          ng-click="toggleDelete()">
+        </button>
+      </div>
+    </ion-nav-buttons>
+
+    <ion-content>
+    <ion-list show-delete="shouldShowDelete">
+      <ion-item ng-repeat="recipe in recipes | favoriteFilter:favorites" class="item-thumbnail-left item-text-wrap" on-swipe-left="deleteFavorite(recipe.id)">
+        <img ng-src="{{recipe.image}}">
+        <h3>{{recipe.name}}</h3>
+        <div>
+          <span style="font-size:75%">
+            <ion-badge ng-repeat="ing in recipe.ingredients">{{ing}}&nbsp;</ion-badge></br>
+            综评&nbsp;<span style="font-weight:bold; color:green">{{recipe.rating}}</span>
+            &nbsp;做过&nbsp;<span style="font-weight:bold; color:green">{{recipe.cooked}}</span>
+            &nbsp;收藏&nbsp;<span style="font-weight:bold; color:green">{{recipe.likes}}</span>
+          </span>
+        </div>
+        <ion-delete-button class="ion-minus-circled"
+          ng-click="deleteFavorite(recipe.id)">
+        </ion-delete-button>
+      </ion-item>
+    </ion-list>
+    </ion-content>
+ </ion-view>

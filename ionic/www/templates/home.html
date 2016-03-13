@@ -7,7 +7,7 @@
 
   <ion-content class="has-header padding">
     <ion-list>
-        <ion-item ng-repeat="recipe in recipes" class="item-thumbnail-left item-text-wrap">
+        <ion-item ng-repeat="recipe in recipes" class="item-thumbnail-left item-text-wrap" ng-click="visitXCF(recipe.id)">
           <img ng-src="{{recipe.image}}">
           <h3>{{recipe.name}}</h3>
           <div>
@@ -19,7 +19,7 @@
             </span>
           </div>
           <ion-option-button class="button-assertive icon ion-star"
-              ng-click="addFavorite({{dish.id}})">
+              ng-click="addFavorite({{recipe.id}})">
           </ion-option-button>
         </ion-item>
       </ion-list>

@@ -67,32 +67,5 @@ angular.module('starter.services', ['ngResource'])
             return favFac;
         }])
 
-        .factory('shoppingFactory', ['$resource', 'baseURL', function($resource,baseURL) {
-            var shopFac = {};
-            var shoppinglist = [];
-
-            shopFac.addToShoppinglist = function (index) {
-                for (var i = 0; i < shoppinglist.length; i++) {
-                    if (shoppinglist[i].id == index)
-                        return;
-                }
-                shoppinglist.push({id: index});
-            };
-
-            shopFac.deleteFromShoppinglist = function (index) {
-                for (var i = 0; i < shoppinglist.length; i++) {
-                    if (shoppinglist[i].id == index) {
-                        shoppinglist.splice(i, 1);
-                    }
-                }
-            };
-
-            shopFac.getShoppinglist = function () {
-                return Shoppinglist;
-            };
-
-            return shopFac;
-
-        }])
 
 ;

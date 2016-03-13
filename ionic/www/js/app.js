@@ -54,10 +54,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', ]
     url: '/favorites',
     views: {
       'menuContent': {
-        templateUrl: 'templates/favorites.html'
+        templateUrl: 'templates/favorites.html',
+        controller: 'FavoritesController'
       }
     }
   })
+
 
   ;
   // if none of the above states are matched, use this as the fallback
