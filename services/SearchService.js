@@ -42,16 +42,21 @@ function searchRecipe(q, callback) {
     var hits = [];
 
     if (res && res.hits && res.hits.hits) {
-      hits = res.hits.hits.map(function(hit) {
-        hit._source.id = hit._id.split(':')[1];
-        return hit._source;
-      });
+      hits = res.hits.hits.map(processResultXCF);
     }
     callback(null, hits);
   }, function(err) {
     console.trace(err.message);
     callback(err, null);
   });
+}
+
+function processResultXCF(hit) {
+  var suffix = "@2o_50sh_1pr_1l_140w_106h_1c_1e_90q_1wh.jpg";
+
+  hit._source.id = hit._id.split(':')[1];
+  hit._source.image = hit._source.image.replace("s2.cdn", "s1.cdn") + suffix;
+  return hit._source;
 }
 
 exports.searchRecipe = searchRecipe;
