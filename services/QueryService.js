@@ -40,6 +40,7 @@ function getDefaultRecipes(callback) {
     if (err) {
       return callback(err, null);
     }
+    docs = docs.map(processResultXCF);
     callback(null, docs);
   });
 }
@@ -67,6 +68,14 @@ function searchRecipe(q, callback) {
     }
     callback(null, docs);
   });
+}
+
+function processResultXCF(doc) {
+  var suffix = "@2o_50sh_1pr_1l_140w_106h_1c_1e_90q_1wh.jpg";
+
+  doc.id = doc._id.split(':')[1];
+  doc.image = doc.image.replace("s2.cdn", "s1.cdn") + suffix;
+  return doc;
 }
 
 exports.getRecipe = getRecipe;

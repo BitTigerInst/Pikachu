@@ -15,10 +15,6 @@ router.get('/v1/recipe/', function(req, res, next) {
         response.error = "Search failed";
         console.log(err.message);
       } else {
-        docs.map(function(doc) {
-          doc.id = doc._id.split(':')[1];
-          return doc;
-        });
         response = docs;
       }
       res.send(response);

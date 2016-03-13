@@ -305,6 +305,7 @@ curl -XPOST http://<hostname>:<port>/<index name>/_refresh
 - [查询与过滤条件的合并](http://es.xiaoleilu.com/054_Query_DSL/75_Queries_with_filters.html)
 - [MongoBD + Solr全文搜索的历程*](http://www.edwardesire.com/full-text-search-of-mongodb-with-solr/)
 - [mongo-connector原理及改造](http://foofish.net/blog/76/mongo-connector)
+- [使用 Elasticsearch 实现博客站内搜索](https://imququ.com/post/elasticsearch.html)
 - [StackOverflow: How to use Elasticsearch with MongoDB?](http://stackoverflow.com/questions/23846971/how-to-use-elasticsearch-with-mongodb)
 - [Optimizing Search Results in Elasticsearch with Scoring and Boosting](https://qbox.io/blog/optimizing-search-results-in-elasticsearch-with-scoring-and-boosting)
 - [Elasticsearch: The Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html)
