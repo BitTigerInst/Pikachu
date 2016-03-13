@@ -9,6 +9,7 @@ config.initialPort = 80;
 config.initialPath = "/";
 
 config.mongodb = {};
+config.elasticsearch = {};
 
 // VCAP_SERVICES
 if (process.env.VCAP_SERVICES) {
@@ -27,7 +28,9 @@ if (process.env.VCAP_SERVICES) {
 }
 
 if (!config.mongodb.dburl) {
-  config.mongodb.dburl = 'mongodb://localhost:27017/pikachu'
+  config.mongodb.dburl = 'mongodb://localhost:27018/pikachu';
 }
+
+config.elasticsearch.url = 'localhost:9200';
 
 module.exports = config;
