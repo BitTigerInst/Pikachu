@@ -1,8 +1,9 @@
 var elasticsearch = require('elasticsearch');
+var config = require('../config');
 
 var client = new elasticsearch.Client({
-  host: 'localhost:9200',
-  log: 'trace'
+  host: config.elasticsearch.url,
+  log: ['error', 'trace']
 });
 
 client.ping({
@@ -20,12 +21,12 @@ client.ping({
 
 
 /**
- * searchRecipe() function to search with ElasticSearch API
+ * Basic recipe search based on name matching with ElasticSearch
  * @param  {[type]}   q        search term
  * @param  {Function} callback function(err, hits)
  * @return {[type]}            [description]
  */
-function searchRecipe(q, callback) {
+function searchRecipeBasic(q, callback) {
 
   client.search({
     index: 'pikachu',
@@ -34,6 +35,77 @@ function searchRecipe(q, callback) {
       query: {
         match: {
           name: q
+        }
+      }
+    }
+  })
+  .then(function(res) {
+    var hits = [];
+
+    if (res && res.hits && res.hits.hits) {
+      hits = res.hits.hits.map(processResultXCF);
+    }
+    callback(null, hits);
+  }, function(err) {
+    console.trace(err.message);
+    callback(err, null);
+  });
+}
+
+/**
+ * Enhanced recipe search with ElasticSearch function score query
+ * @param  {[type]}   q        search term
+ * @param  {Function} callback function(err, hits)
+ * @return {[type]}            [description]
+ */
+function searchRecipe(q, callback) {
+
+  client.search({
+    "index": "pikachu",
+    "type": "recipes",
+    "body": {
+      "query": {
+        "function_score": {
+          "query": {
+            "match": {
+              "name": q
+            }
+          },
+          "functions": [
+            {
+              "field_value_factor": {
+                "field": "likes",
+                "factor": 0.1,
+                "modifier": "log1p",
+                "missing": 1
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "rating",
+                "factor": 1,
+                "modifier": "none"
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "dishes",
+                "factor": 0.1,
+                "modifier": "log1p",
+                "missing": 1
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "cooked",
+                "factor": 0.1,
+                "modifier": "log1p",
+                "missing": 1
+              }
+            }
+          ],
+          "score_mode": "avg",
+          "boost_mode": "multiply"
         }
       }
     }
@@ -60,3 +132,4 @@ function processResultXCF(hit) {
 }
 
 exports.searchRecipe = searchRecipe;
+exports.searchRecipeBasic = searchRecipeBasic;

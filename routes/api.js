@@ -8,9 +8,11 @@ router.get('/v1/recipe/', function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
 
   var response = {};
-
+  console.time("getDefaultRecipes");
   if (true) {
     QueryService.getDefaultRecipes(function(err, docs) {
+      console.timeEnd("getDefaultRecipes");
+
       if (err) {
         response.error = "Search failed";
         console.log(err.message);
@@ -35,7 +37,10 @@ router.get('/v1/recipe/:id', function(req, res, next) {
 
     console.log("Recipe id: " + id);
 
+    console.time("getRecipe");
     QueryService.getRecipe(id, function(err, doc) {
+      console.timeEnd("getRecipe");
+
       if (err) {
         response.error = "Search failed";
         console.log(err.message);
@@ -91,7 +96,9 @@ router.get('/v2/search', function(req, res, next) {
 
     console.log("Search term: " + q);
 
+    console.time("searchRecipe");
     SearchService.searchRecipe(q, function(err, docs) {
+      console.timeEnd("searchRecipe");
       if (err) {
         response.error = "Search failed";
         console.log(err.message);
