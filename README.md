@@ -3,7 +3,7 @@
 Description
 -----------
 
-Our goal is to build a system that discover interesting facts from web data. The system consist of three major components, including web crawler, exploratory analysis, and data visualization.
+Our goal is to build a recipe crawler and search system that discover interesting facts from recipes and provide optimized search results. The system consist of two major components, including web crawler, search.
 
 
 Plan
@@ -14,23 +14,21 @@ Based on our experiences on web development and data science, as well as the des
 * __[2016/02/08 - 2016/02/12]__ Project Selection, Plan Discussion, Proposal Draft Writing, Resource Discovery
 * __[2016/02/13 - 2016/03/07]__ System Design, Project Implementation
     * Web Crawler
-    * Exploratory Analyzer / Recommender
-    * Data Visualization
+    * Search
+    * ~~Exploratory Analyzer / Recommender~~
 * __[2016/03/08 - 2016/03/15]__ Document Writing, User Manual Writing and Video Presentation Making
-
-_Details of each schedule and task will be added later._
 
 Project management
 ------------------
 
 [Pikachu@Trello](https://trello.com/b/VxeNSfp5/xiachufang-crawler-recommendation)
 
+Development Guild Lines
+-----------------------
 
-Resource
---------
-
-1. __[BitTiger Project: AppStore - Website]__ https://slack-files.com/T0GUEMKEZ-F0J4G9QTT-274d3bc97e
-
+- __Modularity.__ Following the principle _"loose coupling and high cohesion"_, each module should be standalone.
+- __Minimalism.__ Each module should be kept short, simple, and concise. Every piece of code should be transparent upon first reading.
+- __Easy extensibility.__ New modules (as new classes and functions) are should be simply add, and existing modules should be extended easily.
 
 Language & Framework & Tech Stack
 --------------------
@@ -40,18 +38,20 @@ Language & Framework & Tech Stack
 + Cloud Platform: Cloud Foundry
 
 
-Development Guild Lines
------------------------
-
-- __Modularity.__ Following the principle _"loose coupling and high cohesion"_, each module should be standalone.
-- __Minimalism.__ Each module should be kept short, simple, and concise. Every piece of code should be transparent upon first reading.
-- __Easy extensibility.__ New modules (as new classes and functions) are should be simply add, and existing modules should be extended easily.
+System Diagram
+--------------
 
 
-Reference
----------
+![System Architecture](https://raw.githubusercontent.com/BitTigerInst/Pikachu/master/docs/System%20Architecture.png)
+---
 
-**Crawler**
+Resource
+--------
+
+[BitTiger Project: AppStore - Website](https://slack-files.com/T0GUEMKEZ-F0J4G9QTT-274d3bc97e)
+
+
+**Web Crawler**
 
 - [node-simplecrawler](https://github.com/cgiffard/node-simplecrawler)
 - [cheerio](https://github.com/cheeriojs/cheerio)
@@ -61,9 +61,13 @@ Reference
 
 MEAN is an acronym for MongoDB, Express.js , Angular.js and Node.js
 
-MongoDB: *MongoDB is an open-source, document database (NoSQL) designed for ease of development and scaling.*
+A very good online course about MEAN stack on edX:
 
 - [MongoDBx: M101x Introduction to MongoDB using the MEAN Stack](https://courses.edx.org/courses/course-v1:MongoDBx+M101x+3T2015/)
+
+
+MongoDB: *MongoDB is an open-source, document database (NoSQL) designed for ease of development and scaling.*
+
 - [M101JS: MongoDB for Node.js Developers](https://university.mongodb.com/courses/M101JS/)
 - [www.mongodb.org](https://www.mongodb.org/)
 - [mongoose](http://mongoosejs.com/)
@@ -82,8 +86,29 @@ Node.js: *Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine
 - [npm](https://www.npmjs.com/)
 
 
+**Hybrid Mobile App**
+
+Ionic: *Ionic is an advanced HTML5 hybrid mobile app framework, it makes it incredibly easy to build beautiful and interactive mobile apps using HTML5 and AngularJS.*
+
+- [Ionic Framework](http://ionicframework.com/)
+
+**Search**
+
+ElasticSearch: *Elasticsearch is a search server based on Lucene. It provides a distributed, multitenant-capable full-text search engine with an HTTP web interface and schema-free JSON documents.*
+
+- [elastic.co](https://www.elastic.co/)
+- [elasticsearch-js](https://github.com/elastic/elasticsearch-js)
+
+Miscellaneous
+-------------
+
+[FAQ](https://github.com/BitTigerInst/Pikachu/blob/master/docs/faq.md)
+
+[MongoDB & ElasticSearch For Full Text Search In Chinese](https://github.com/BitTigerInst/Pikachu/blob/master/docs/mongodb_elasticsearch_setup.md)
+
+[Anti Anti-scraping Strategy](http://aaronice.github.io/2016/02/15/anti-anti-spider-strategy/)
 
 Owner
 -----
 
-@team: Pikachu
+@Pikachu
