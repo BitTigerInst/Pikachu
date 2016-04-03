@@ -10,17 +10,14 @@ By Zibing @ Pikachu
 
 技术栈选择全栈Javascript: MEAN，也就是MongoDB，Express.js, Angular.js, Node.js.
 
-MongoDB: MongoDB是一个开源的基于文件的NoSQL数据库，有便于开发和扩展的特性。
+搜索引擎采用ElasticSearch。
 
-Express.js: Express是一个快速，无偏见，极简的Node.js网站架构，有大量优秀的中间件可以使用。
-
-Angular.js: Angular是移动web和桌面web的开发平台，提供一整套web框架。
-
-Node.js: Node.js是基于Google Chrome的V8 JavaScript引擎的Javascript runtime，具有事件驱动，非阻塞I/O等特性。
-
-Ionic: Ionic是一个基于Angular的HTML5 Hybrid App开发框架，能够快速方便地开发出跨平台的交互式移动端app。
-
-ElasticSearch: ElasticSearch是基于Lucene的搜索引擎，提供分布式，多租户，全文搜索，RESTful API和JSON文件功能。
+* MongoDB: MongoDB是一个开源的基于文件的NoSQL数据库，有便于开发和扩展的特性。
+* Express.js: Express是一个快速，无偏见，极简的Node.js网站架构，有大量优秀的中间件可以使用。
+* Angular.js: Angular是移动web和桌面web的开发平台，提供一整套web框架。
+* Node.js: Node.js是基于Google Chrome的V8 JavaScript引擎的Javascript runtime，具有事件驱动，非阻塞I/O等特性。
+* Ionic: Ionic是一个基于Angular的HTML5 Hybrid App开发框架，能够快速方便地开发出跨平台的交互式移动端app。
+* ElasticSearch: ElasticSearch是基于Lucene的搜索引擎，提供分布式，多租户，全文搜索，RESTful API和JSON文件功能。
 
 
 系统架构如下：
@@ -58,52 +55,52 @@ C. 通过检测蜜罐 - 蜜罐通常是那些对于一个普通用户不可见�
 
 针对这些反爬虫机制，可以通过以下策略来避开或者绕过这样的封锁:
 
-* 轮换IP地址
+**A. 轮换IP地址**
 
-    IP黑名单是可能的爬虫的最简单的方法。通过创建IP地址池，并使用不同的IP发出请求，将使服务器很难检测到爬虫。
+IP黑名单是可能的爬虫的最简单的方法。通过创建IP地址池，并使用不同的IP发出请求，将使服务器很难检测到爬虫。
 
-    对策：
-    * 使用来自代理服务的IP列表，一定的时间间隔后随机挑选一个IP
-
-
-* 轮换Cookie
-
-    Cookies是加密存储在客户端的数据，有的网站使用Cookie来标识用户。如果用户在客户端发送高频请求，有可能被认定为可疑爬虫，从而拒绝访问。
-
-    对策：
-    * 自定义和管理cookie池
-        * 发送不包含cookie的请求到服务器，解析返回的包并设置cookie值; 它存储在cookie的收集器;
-        * 从cookie收集器中获取cookie，如果cookie不可用，则从cookie收集器中将其删除;
-        * 利用时间戳管理cookie收集器，这样是为了让爬虫每次首先获得的距离当前时间最远的cookie。
-    * 关闭Cookies
-        * 通过禁用cookie，可以帮助防止某些网站通过使用cookie来标识用户，从而导致爬虫被封禁。
+对策：
+* 使用来自代理服务的IP列表，一定的时间间隔后随机挑选一个IP
 
 
-* 用户代理欺骗
+**B. 轮换Cookie**
 
-    伪装成浏览器的方法之一是修改用户代理(User Agent)。用户代理是在请求Header中的字符串，它包含用户代理信息，例如网络浏览器，客户端，操作系统等的版本。
+Cookies是加密存储在客户端的数据，有的网站使用Cookie来标识用户。如果用户在客户端发送高频请求，有可能被认定为可疑爬虫，从而拒绝访问。
 
-    对策：
-    * 通过用户代理的列表或者随机生成器，随机选择或生成对于每个请求的欺骗用户代理。设置为用户代理一个常见的网页浏览器，而不是使用默认的请求客户端。
-
-
-* 限制速度
-
-    降低抓取速度，善待网站，而不要让其不堪重负，或者DDoS攻击服务器。
-
-    对策：
-    * 在每个请求之间的放入一些随机休眠时间
-    * 在抓取一定的网页数后，添加一些延迟
-    * 使用尽可能小的并发请求数目
+对策：
+* 自定义和管理cookie池
+    * 发送不包含cookie的请求到服务器，解析返回的包并设置cookie值; 它存储在cookie的收集器;
+    * 从cookie收集器中获取cookie，如果cookie不可用，则从cookie收集器中将其删除;
+    * 利用时间戳管理cookie收集器，这样是为了让爬虫每次首先获得的距离当前时间最远的cookie。
+* 关闭Cookies
+    * 通过禁用cookie，可以帮助防止某些网站通过使用cookie来标识用户，从而导致爬虫被封禁。
 
 
-* \*避免重复性爬行模式
+**C. 用户代理欺骗**
 
-    有些网站实现智能防抓取机制，从而重复操作将有可能检测为爬虫。为了让爬虫看起来像一个人，加上随机点击，鼠标移动，随机行为等。使用自动化测试工具，如可模拟器正常的“人的行为”。
+伪装成浏览器的方法之一是修改用户代理(User Agent)。用户代理是在请求Header中的字符串，它包含用户代理信息，例如网络浏览器，客户端，操作系统等的版本。
 
-* \*小心蜜罐
+对策：
+* 通过用户代理的列表或者随机生成器，随机选择或生成对于每个请求的欺骗用户代理。设置为用户代理一个常见的网页浏览器，而不是使用默认的请求客户端。
 
-    这些蜜罐（HoneyPot）通常是链接，普通用户无法看到，但爬虫则可以。他们有可能在CSS样式中显示“display: none”。因此，蜜罐的检测可能会非常棘手。
+
+**D. 限制速度**
+
+降低抓取速度，善待网站，而不要让其不堪重负，或者DDoS攻击服务器。
+
+对策：
+* 在每个请求之间的放入一些随机休眠时间
+* 在抓取一定的网页数后，添加一些延迟
+* 使用尽可能小的并发请求数目
+
+
+**E \*避免重复性爬行模式**
+
+有些网站实现智能防抓取机制，从而重复操作将有可能检测为爬虫。为了让爬虫看起来像一个人，加上随机点击，鼠标移动，随机行为等。使用自动化测试工具，如可模拟器正常的“人的行为”。
+
+**F \*小心蜜罐**
+
+这些蜜罐（HoneyPot）通常是链接，普通用户无法看到，但爬虫则可以。他们有可能在CSS样式中显示“display: none”。因此，蜜罐的检测可能会非常棘手。
 
 *以上"反反爬虫"策略也可阅读博文[Anti Anti-spider Strategy](http://aaronice.github.io/2016/02/15/anti-anti-spider-strategy/)*
 
@@ -129,6 +126,8 @@ MongoDB和Node.js有官方的原生驱动，不过为了便于建立数据模型
 #### 前端
 
 使用Ionic + Angular可以很好的实现Hybrid app开发，利用Ionic的模拟器，能够在网页上直接模拟移动端iOS和Android的效果，并且能够模拟手势操作。本项目中，首页和菜谱搜索均使用了[ion-list](http://ionicframework.com/docs/api/directive/ionList/)来呈现API返回结果列表。List是在移动端被广泛使用的一种简洁而有效的呈现方式。它不仅可以承载图片、文本信息，亦可实现手势交互，如滑动、拖拽、下拉更新等。以本项目为例，用户可以通过向左滑动菜谱将其添加至收藏菜单。除List之外，另外一种实现方式是使用[Ionic Card](http://ionicframework.com/docs/components/#cards)，效果可参考[Google Now cards](https://www.google.com/landing/now/).
+
+有关Hybrid App，可以参考Xinyue的原创博文[浅谈Hybrid Mobile App](http://bittiger.blogspot.com/2016/02/hybrid-mobile-app.html)
 
 #### 成果展示
 ![Preview](https://raw.githubusercontent.com/BitTigerInst/Pikachu/master/docs/animation.gif)
@@ -166,7 +165,7 @@ https://github.com/BitTigerInst/Pikachu/blob/master/docs/mongodb_elasticsearch_s
 ## 参考资源
 
 ### 有关爬虫
-
+* [Anti Anti-spider Strategy](http://aaronice.github.io/2016/02/15/anti-anti-spider-strategy/)
 * [HOW TO PREVENT GETTING BLACKLISTED WHILE SCRAPING](https://learn.scrapehero.com/how-to-prevent-getting-blacklisted-while-scraping/)
 * [防止爬虫被墙的方法总结](http://www.dianacody.com/2014/10/01/spider_5.html)
 * [应对反爬虫之换Cookie](https://medium.com/@Masutangu/%E5%BA%94%E5%AF%B9%E5%8F%8D%E7%88%AC%E8%99%AB%E4%B9%8B%E6%8D%A2cookie-d3b48b02d0e6)
@@ -194,24 +193,25 @@ https://github.com/BitTigerInst/Pikachu/blob/master/docs/mongodb_elasticsearch_s
 
 #### Ionic
 * [Ionic Framework](http://ionicframework.com/)
-
+* [浅谈Hybrid Mobile App](http://bittiger.blogspot.com/2016/02/hybrid-mobile-app.html)
 
 ### 有关搜索引擎
 
-- [Solr vs ElasticSearch](http://solr-vs-elasticsearch.com/)
-- [StackOverflow: Solr vs. ElasticSearch](http://stackoverflow.com/questions/10213009/solr-vs-elasticsearch)
-- [用 mongodb + elasticsearch 实现中文检索](http://blog.csdn.net/yeasy/article/details/47842437)
-- [使用Mongo Connector和Elasticsearch实现模糊匹配](http://www.csdn.net/article/2014-09-02/2821485-how-to-perform-fuzzy-matching-with-mongo-connector?)
-- [MongoDB 数据自动同步到 ElasticSearch](https://segmentfault.com/a/1190000003773614)
-- [Resyncing the Connector](https://github.com/mongodb-labs/mongo-connector/wiki/Resyncing%20the%20Connector)
-- [mongo-connector原理及改造](http://foofish.net/blog/76/mongo-connector)
-- [查询与过滤条件的合并](http://es.xiaoleilu.com/054_Query_DSL/75_Queries_with_filters.html)
-- [MongoBD + Solr全文搜索的历程*](http://www.edwardesire.com/full-text-search-of-mongodb-with-solr/)
-- [mongo-connector原理及改造](http://foofish.net/blog/76/mongo-connector)
-- [使用 Elasticsearch 实现博客站内搜索](https://imququ.com/post/elasticsearch.html)
-- [StackOverflow: How to use Elasticsearch with MongoDB?](http://stackoverflow.com/questions/23846971/how-to-use-elasticsearch-with-mongodb)
-- [Optimizing Search Results in Elasticsearch with Scoring and Boosting](https://qbox.io/blog/optimizing-search-results-in-elasticsearch-with-scoring-and-boosting)
-- [Elasticsearch: The Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html)
-- [Elasticsearch权威指南（中文版）](https://www.gitbook.com/book/looly/elasticsearch-the-definitive-guide-cn/details)
-- [ElasticSearch Javascript API](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/quick-start.html)
-- [Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+* [Solr vs ElasticSearch](http://solr-vs-elasticsearch.com/)
+* [StackOverflow: Solr vs. ElasticSearch](http://stackoverflow.com/questions/10213009/solr-vs-elasticsearch)
+* [MongoDB & ElasticSearch For Full Text Search In Chinese](http://aaronice.github.io/2016/02/27/full-text-search-mongodb-with-elasticsearch/)
+* [用 mongodb + elasticsearch 实现中文检索](http://blog.csdn.net/yeasy/article/details/47842437)
+* [使用Mongo Connector和Elasticsearch实现模糊匹配](http://www.csdn.net/article/2014-09-02/2821485-how-to-perform-fuzzy-matching-with-mongo-connector?)
+* [MongoDB 数据自动同步到 ElasticSearch](https://segmentfault.com/a/1190000003773614)
+* [Resyncing the Connector](https://github.com/mongodb-labs/mongo-connector/wiki/Resyncing%20the%20Connector)
+* [mongo-connector原理及改造](http://foofish.net/blog/76/mongo-connector)
+* [查询与过滤条件的合并](http://es.xiaoleilu.com/054_Query_DSL/75_Queries_with_filters.html)
+* [MongoBD + Solr全文搜索的历程*](http://www.edwardesire.com/full-text-search-of-mongodb-with-solr/)
+* [mongo-connector原理及改造](http://foofish.net/blog/76/mongo-connector)
+* [使用 Elasticsearch 实现博客站内搜索](https://imququ.com/post/elasticsearch.html)
+* [StackOverflow: How to use Elasticsearch with MongoDB?](http://stackoverflow.com/questions/23846971/how-to-use-elasticsearch-with-mongodb)
+* [Optimizing Search Results in Elasticsearch with Scoring and Boosting](https://qbox.io/blog/optimizing-search-results-in-elasticsearch-with-scoring-and-boosting)
+* [Elasticsearch: The Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html)
+* [Elasticsearch权威指南（中文版）](https://www.gitbook.com/book/looly/elasticsearch-the-definitive-guide-cn/details)
+* [ElasticSearch Javascript API](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/quick-start.html)
+* [Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
