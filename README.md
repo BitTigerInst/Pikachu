@@ -8,11 +8,17 @@
 ### 项目目标
 目标是能实现一个web/mobile app，提供有效的菜谱搜索。平时生活中搜索菜谱时，往往结果并不是很理想，菜谱的质量参差不齐。所以我们希望能够控制搜索的各项指标权重，来获得最佳的用户搜索结果和体验。
 
+### 成果展示
+![Preview](https://raw.githubusercontent.com/BitTigerInst/Pikachu/master/docs/animation.gif)
+
+
 ### 技术架构
 
 技术栈选择全栈Javascript: MEAN，也就是MongoDB，Express.js, Angular.js, Node.js.
 
 搜索引擎采用ElasticSearch。
+
+主要技术栈介绍：
 
 * MongoDB: MongoDB是一个开源的基于文件的NoSQL数据库，有便于开发和扩展的特性。
 * Express.js: Express是一个快速，无偏见，极简的Node.js网站架构，有大量优秀的中间件可以使用。
@@ -22,15 +28,16 @@
 * ElasticSearch: ElasticSearch是基于Lucene的搜索引擎，提供分布式，多租户，全文搜索，RESTful API和JSON文件功能。
 
 
-系统架构如下：
+**系统架构**：
 
 ![System Architecture](https://raw.githubusercontent.com/BitTigerInst/Pikachu/master/docs/System%20Architecture.png)
 
-展示层：web前端架构由Angular.js实现，结合Ionic，可以生成Hybrid的移动端app。
 
-业务逻辑层：主要由控制器（Controller），网页爬虫（Web Crawler）组成，使用Node.js和流行的Express框架实现。
+**展示层**：web前端架构由Angular.js实现，结合Ionic，可以生成Hybrid的移动端app。
 
-持久层：使用MongoDB作为抓取数据存储的数据库，ElasticSearch用作搜索引擎。
+**业务逻辑层**：主要由控制器（Controller），网页爬虫（Web Crawler）组成，使用Node.js和流行的Express框架实现。
+
+**持久层**：使用MongoDB作为抓取数据存储的数据库，ElasticSearch用作搜索引擎。
 
 
 ### 实现过程
@@ -61,7 +68,7 @@ C. 通过检测蜜罐 - 蜜罐通常是那些对于一个普通用户不可见�
 
 IP黑名单是可能的爬虫的最简单的方法。通过创建IP地址池，并使用不同的IP发出请求，将使服务器很难检测到爬虫。
 
-对策：
+**对策**：
 * 使用来自代理服务的IP列表，一定的时间间隔后随机挑选一个IP
 
 
@@ -69,7 +76,7 @@ IP黑名单是可能的爬虫的最简单的方法。通过创建IP地址池，�
 
 Cookies是加密存储在客户端的数据，有的网站使用Cookie来标识用户。如果用户在客户端发送高频请求，有可能被认定为可疑爬虫，从而拒绝访问。
 
-对策：
+**对策**：
 * 自定义和管理cookie池
     * 发送不包含cookie的请求到服务器，解析返回的包并设置cookie值; 它存储在cookie的收集器;
     * 从cookie收集器中获取cookie，如果cookie不可用，则从cookie收集器中将其删除;
@@ -82,7 +89,7 @@ Cookies是加密存储在客户端的数据，有的网站使用Cookie来标识�
 
 伪装成浏览器的方法之一是修改用户代理(User Agent)。用户代理是在请求Header中的字符串，它包含用户代理信息，例如网络浏览器，客户端，操作系统等的版本。
 
-对策：
+**对策**：
 * 通过用户代理的列表或者随机生成器，随机选择或生成对于每个请求的欺骗用户代理。设置为用户代理一个常见的网页浏览器，而不是使用默认的请求客户端。
 
 
@@ -90,7 +97,7 @@ Cookies是加密存储在客户端的数据，有的网站使用Cookie来标识�
 
 降低抓取速度，善待网站，而不要让其不堪重负，或者DDoS攻击服务器。
 
-对策：
+**对策**：
 * 在每个请求之间的放入一些随机休眠时间
 * 在抓取一定的网页数后，添加一些延迟
 * 使用尽可能小的并发请求数目
@@ -113,9 +120,14 @@ Cookies是加密存储在客户端的数据，有的网站使用Cookie来标识�
 MongoDB和Node.js有官方的原生驱动，不过为了便于建立数据模型，使用了Mongoose，好处在于可以提供较为方便的schema验证管理，而基础的查询操作依然可以使用原生驱动的API，以获得更高性能。
 
 #### 搜索引擎
+
 抓取的数据存储在MongoDB中，MongoDB本身有全文搜索功能，不过仅限于英文，对于中文全文搜索的支持比较弱。因此我们考虑使用支持中文全文搜索的引擎ElasticSearch和Apache Solr。
 
-经过权衡，我们最终选择了ElasticSearch，主要原因在于1. 对RESTful API的支持更好；2. 搜索性能上更胜一筹，扩展性更强；3. 有官方的Javascript库。
+经过权衡，我们最终选择了ElasticSearch，主要原因在于:
+
+1. 对RESTful API的支持更好；
+2. 搜索性能上更胜一筹，扩展性更强；
+3. 有官方的Javascript库。
 
 为了让ElasticSearch能够获取存储在MongoDB中的数据，我们需要对MongoDB和ElasticSearch进行连接。[mongo-connector](https://github.com/mongodb-labs/mongo-connector/wiki) 是一个连接器，可以连接和同步MongoDB的数据到目标系统，比如Apache Solr，ElasticSearch，甚至MongoDB本身。
 
@@ -130,9 +142,6 @@ MongoDB和Node.js有官方的原生驱动，不过为了便于建立数据模型
 使用Ionic + Angular可以很好的实现Hybrid app开发，利用Ionic的模拟器，能够在网页上直接模拟移动端iOS和Android的效果，并且能够模拟手势操作。本项目中，首页和菜谱搜索均使用了[ion-list](http://ionicframework.com/docs/api/directive/ionList/)来呈现API返回结果列表。List是在移动端被广泛使用的一种简洁而有效的呈现方式。它不仅可以承载图片、文本信息，亦可实现手势交互，如滑动、拖拽、下拉更新等。以本项目为例，用户可以通过向左滑动菜谱将其添加至收藏菜单。除List之外，另外一种实现方式是使用[Ionic Card](http://ionicframework.com/docs/components/#cards)，效果可参考[Google Now cards](https://www.google.com/landing/now/).
 
 有关Hybrid App，可以参考Xinyue的原创博文[浅谈Hybrid Mobile App](http://bittiger.blogspot.com/2016/02/hybrid-mobile-app.html)
-
-#### 成果展示
-![Preview](https://raw.githubusercontent.com/BitTigerInst/Pikachu/master/docs/animation.gif)
 
 
 ### 未来工作
