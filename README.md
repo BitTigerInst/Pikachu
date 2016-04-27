@@ -3,16 +3,15 @@
 
 [English Version](https://github.com/BitTigerInst/Pikachu/blob/master/README_en.md)
 
-## 概述
 
-### 项目目标
+## 概述 & 目标
 目标是能实现一个web/mobile app，提供有效的菜谱搜索。平时生活中搜索菜谱时，往往结果并不是很理想，菜谱的质量参差不齐。所以我们希望能够控制搜索的各项指标权重，来获得最佳的用户搜索结果和体验。
 
-### 成果展示
+## 成果展示
 ![Preview](https://raw.githubusercontent.com/BitTigerInst/Pikachu/master/docs/animation.gif)
 
 
-### 技术架构
+## 技术架构
 
 技术栈选择全栈Javascript: MEAN，也就是MongoDB，Express.js, Angular.js, Node.js.
 
@@ -40,9 +39,9 @@
 **持久层**：使用MongoDB作为抓取数据存储的数据库，ElasticSearch用作搜索引擎。
 
 
-### 实现过程
+## 实现过程
 
-#### 网页爬虫
+### 网页爬虫
 
 最初选择技术时，主要有两种爬虫作为备选：
 1. Python Scrapy
@@ -113,13 +112,13 @@ Cookies是加密存储在客户端的数据，有的网站使用Cookie来标识�
 
 *以上"反反爬虫"策略也可阅读博文[Anti Anti-spider Strategy](http://aaronice.github.io/2016/02/15/anti-anti-spider-strategy/)*
 
-#### 网站服务器端
+### 服务器端
 
 对于网页服务来说，后端主要功能在于提供API。而Express就提供了很方便的路由机制，并且在中间件中可以进行一些诸如提供静态页、验证、过滤等功能。
 
 MongoDB和Node.js有官方的原生驱动，不过为了便于建立数据模型，使用了Mongoose，好处在于可以提供较为方便的schema验证管理，而基础的查询操作依然可以使用原生驱动的API，以获得更高性能。
 
-#### 搜索引擎
+### 搜索引擎
 
 抓取的数据存储在MongoDB中，MongoDB本身有全文搜索功能，不过仅限于英文，对于中文全文搜索的支持比较弱。因此我们考虑使用支持中文全文搜索的引擎ElasticSearch和Apache Solr。
 
@@ -137,14 +136,14 @@ MongoDB和Node.js有官方的原生驱动，不过为了便于建立数据模型
 
 配置完成以后，重点则在于如何设置权重，让搜索结果更为合理和优化。因为抓取的数据包含了rating, likes, cooked, dishes, comments等数据（评分、收藏人数、做过人数、做过次数，评论数）。我们利用了ElasticSearch本身的function-score-query，对用户输入的查询关键词所得分数进行加权处理，包含rating, dishes，likes，cooked等，最终得出的数据综合考虑了用户的输入以及菜谱本身的质量。
 
-#### 前端
+### 前端
 
 使用Ionic + Angular可以很好的实现Hybrid app开发，利用Ionic的模拟器，能够在网页上直接模拟移动端iOS和Android的效果，并且能够模拟手势操作。本项目中，首页和菜谱搜索均使用了[ion-list](http://ionicframework.com/docs/api/directive/ionList/)来呈现API返回结果列表。List是在移动端被广泛使用的一种简洁而有效的呈现方式。它不仅可以承载图片、文本信息，亦可实现手势交互，如滑动、拖拽、下拉更新等。以本项目为例，用户可以通过向左滑动菜谱将其添加至收藏菜单。除List之外，另外一种实现方式是使用[Ionic Card](http://ionicframework.com/docs/components/#cards)，效果可参考[Google Now cards](https://www.google.com/landing/now/).
 
 有关Hybrid App，可以参考Xinyue的原创博文[浅谈Hybrid Mobile App](http://bittiger.blogspot.com/2016/02/hybrid-mobile-app.html)
 
 
-### 未来工作
+## 未来工作
 
 1. 增加推荐系统，在用户账户的基础上做出个性化的推荐和搜索结果
 2. 拆分后端，采用微服务架构，分离控制器、网页爬虫、推荐系统
